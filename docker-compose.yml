@@ -1,13 +1,20 @@
-version: '3'
-
+version: "3"
 services:
   wireguard:
-    image: linuxserver/wireguard
-    ports:
-      - 51820:51820/udp
+    image: nareshyadav219/wg0
+    container_name: wireguard
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - SERVERURL=auto #optional
+      - SERVERPORT=51820 #optional
     volumes:
       - /lib/modules:/lib/modules
-      - ./wg0.conf:/config/wg0.conf:ro
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
